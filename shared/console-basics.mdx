@@ -1,0 +1,117 @@
+[Console](app/dev_tools#/console) lets you run requests to Elasticsearch's APIs and view the responses. Its auto-complete, request history and contextual links to API documentation make Console a very handy tool to interact with data from your project.
+
+
+## Write requests
+
+Console understands commands in a cURL-like syntax. For example, the following is a GET request to the Elasticsearch _search_ API.
+
+```sh
+GET /_search
+{
+ "query": {
+   "match_all": {}
+ }
+}
+```
+
+Here is the equivalent command in cURL:
+
+```sh
+curl "${ES_URL}/_search" \
+-H "Authorization: ApiKey ${API_KEY}" \
+-H "Content-Type: application/json" \
+-d'
+{
+ "query": {
+   "match_all": {}
+ }
+}'
+```
+
+<DocCallOut color="success" title="">
+    When you paste a cURL command into **Console**, it automatically converts to **Console** syntax. You can also export **Console** commands as cURL and run them outside of **Console**, provided that you add an API key to authenticate the request.
+</DocCallOut>>
+
+Console defaults requests to Elasticsearch APIs, but you can also send requests to Management APIs. To do that, prefix the path with `kbn:`. For example, `POST kbn:api/saved_objects/_export`.
+
+## Autocomplete
+
+When you're typing a command, **Console** makes context-sensitive suggestions. These suggestions show you the parameters for each API and speed up your typing. You can edit your preferences for autocomplete in the console settings.
+
+## API documentation
+
+To view the documentation for an API endpoint, select the action icon, then select **Open documentation**.
+
+## Comments
+
+You can write comments or temporarily disable parts of a request by using double forward slashes (`//`) or pound (`#`) signs to create single-line comments.
+
+You can also use a forward slash followed by an asterisk (`/*`) to mark the beginning of multi-line comments. An asterisk followed by a forward slash (`*/`) marks the end.
+
+## Variables
+
+Console lets you create variables that are specific to your project. You can include them in the path and body of your requests as many times as you need using the `${variableName}` syntax.
+
+## Auto-formatting
+
+Auto-formatting helps you format requests. Select one or more requests you want to format, select the action icon, and then select **Auto indent**.
+
+<DocImage size="m" url="media/auto-indent-devtools.gif" alt="gif showing auto-indent for a console request"/>
+
+<DocCallOut color="success" title="">
+    When you **Auto indent** a request that is already well formatted, **Console** collapses the request body to a single line per document. This is helpful when working with Elasticsearch [bulk APIs](https://www.elastic.co/guide/en/elasticsearch/reference/8.12/docs-bulk.html).
+</DocCallOut>>
+
+
+## Run requests
+
+Submit requests using the play button.
+
+<DocImage size="m" url="media/devtool-run-request.gif" alt="gif showing requests running in console"/>
+
+You can select multiple requests and submit them together. **Console** sends the requests to Elasticsearch one by one and shows the output in the response pane. Submitting multiple requests is helpful when you're debugging an issue or trying query combinations in multiple scenarios.
+
+## Get your request history
+
+**Console** keeps a list of the last 500 requests successfully executed under **History**. When you select a request and select **Apply**, it is added to the editor at the current position of the cursor.
+
+## Configure Console settings
+
+In **Settings**, configure the font size, JSON syntax, and autocomplete suggestions of **Console**.
+
+## Keyboard shortcuts
+
+<DocDefList>
+    <DocDefTerm>Ctrl/Cmd + I</DocDefTerm>
+    <DocDefDescription>Auto indent current request</DocDefDescription>
+
+    <DocDefTerm>Ctrl/Cmd + /</DocDefTerm>
+    <DocDefDescription>Open documentation for current request</DocDefDescription>
+
+    <DocDefTerm>Ctrl + Space </DocDefTerm>
+    <DocDefDescription>Open auto-complete (even if not typing)</DocDefDescription>
+
+    <DocDefTerm>Ctrl/Cmd + Enter </DocDefTerm>
+    <DocDefDescription>Submit request</DocDefDescription>
+
+    <DocDefTerm>Ctrl/Cmd + Up/Down  </DocDefTerm>
+    <DocDefDescription>Jump to the previous/next request start or end.</DocDefDescription>
+   
+    <DocDefTerm>Ctrl/Cmd + Alt + L  </DocDefTerm>
+    <DocDefDescription>Collapse/expand current scope.</DocDefDescription>
+   
+    <DocDefTerm>Ctrl/Cmd + Option + 0  </DocDefTerm>
+    <DocDefDescription>Collapse all scopes but the current one. Expand by adding a shift.</DocDefDescription>
+    
+    <DocDefTerm>Down arrow    </DocDefTerm>
+    <DocDefDescription>Switch focus to auto-complete menu.</DocDefDescription>
+    
+    <DocDefTerm>Enter/Tab    </DocDefTerm>
+    <DocDefDescription>Select the current term in auto-complete menu</DocDefDescription>
+    
+    <DocDefTerm>Ctrl/Cmd + L   </DocDefTerm>
+    <DocDefDescription>Go to line number</DocDefDescription>
+    
+    <DocDefTerm>Esc    		</DocDefTerm>
+    <DocDefDescription>Close auto-complete menu</DocDefDescription>
+</DocDefList>
