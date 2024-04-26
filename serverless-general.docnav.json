@@ -40,6 +40,30 @@
           "id": "serverlessGeneralBillingHistory"
         }
       ]
+    },
+    {
+      "label": "Help Center test",
+      "pageId": "serverlessGeneralManageAccessToOrganization",
+      "items": [
+        {
+          "id": "hcEsDevtoolsSearchProfilerOverview"
+        },
+        {
+          "id": "hcEsDevtoolsConsoleOverview"
+        },
+        {
+          "id": "hcSecDevtoolsSearchProfilerOverview"
+        },
+        {
+          "id": "hcSecDevtoolsConsoleOverview"
+        },
+        {
+          "id": "hcObsDevtoolsSearchProfilerOverview"
+        },
+        {
+          "id": "hcObsDevtoolsConsoleOverview"
+        }
+      ]
     }
   ]
 }
