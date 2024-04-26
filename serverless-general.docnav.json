@@ -64,6 +64,15 @@
           "id": "hcObsDevtoolsConsoleOverview"
         },
         {
+          "id": "hcEsKibanaSearch"
+        },
+        {
+          "id": "hcObsKibanaSearch"
+        },
+        {
+          "id": "hcSecKibanaSearch"
+        },
+        {
           "id": "hcSecNavigationAndInteractions"
         }
       ]
