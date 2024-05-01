@@ -1,0 +1,39 @@
+[Ingest pipelines](app/management/ingest/ingest_pipelines) transform, enrich, and modify documents before they are indexed into Elasticsearch, 
+allowing you to preprocess your data in a flexible and scalable manner.
+
+## How does it work?
+
+Ingest pipelines are defined in Elasticsearch and include a series of configurable tasks called processors. Each processor performs an operation on 
+the document. For example, a processor can parse, enrich, filter, or modify the document. When you ingest a document into Elasticsearch, the document passes through the ingest pipeline, then
+each processor is sequentially applied to the document. 
+
+Processors perform the following operations:
+
+- Enrichment &mdash; Add additional information from external data sources, such as another index or external database
+- Transformation &mdash; Extract and raname fields, convert data types, remove or add fields, and more
+- Filtering &mdash; Specify conditions for processing the documents, which allow you to control the transformed or enriched documents
+- Pipeline handling &mdash; Manage the flow of documents through the pipeline and perform specified actions 
+- Array/JSON handling &mdash; Manipulate arrays and JSON objects in documents with structured data formats
+
+For more information, check [Processor reference](https://www.elastic.co/guide/en/elasticsearch/reference/current/processors.html#ingest-processors-categories). 
+
+<DocCallOut title="Tip">
+Map your custom data to Elastic Common Schema (ECS), making it easier to search your data and reuse visualizations from other data sets. 
+When you create a pipeline, select **New pipeline from CSV**. For more information, check [Map custom data to ECS](https://www.elastic.co/guide/en/ecs/current/ecs-converting.html).
+</DocCallOut>
+
+## Test pipelines
+
+Before you use ingest pipelines in production, test them using sample documents.
+
+1. Create or edit a pipeline.
+1. Click **Add documents**.
+1. On the **Documents** tab, add the sample documents. 
+1. Click **Run the pipeline**.
+
+![Documents tab on the Test pipeline window that shows two sample documents in JSON format](./images/ingest-pipelines-test.gif)
+
+## Add a pipeline to an indexing request
+
+Use the `pipeline` query parameter to apply a pipeline to documents in 
+[individual or bulk requests](https://www.elastic.co/guide/en/elasticsearch/reference/current/ingest.html#add-pipeline-to-indexing-request)
