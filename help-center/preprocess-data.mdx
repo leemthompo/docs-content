@@ -9,11 +9,11 @@ each processor is sequentially applied to the document.
 
 Processors perform the following operations:
 
-- Enrichment &mdash; Add additional information from external data sources, such as another index or external database
-- Transformation &mdash; Extract and raname fields, convert data types, remove or add fields, and more
-- Filtering &mdash; Specify conditions for processing the documents, which allow you to control the transformed or enriched documents
-- Pipeline handling &mdash; Manage the flow of documents through the pipeline and perform specified actions 
-- Array/JSON handling &mdash; Manipulate arrays and JSON objects in documents with structured data formats
+- Enrichment &mdash; Add information from external data sources, such as another index or external database, or apply transformation to your documents for a more contextual and insightful search.
+- Transformation &mdash; Parse information from your documents to make sure they conform to a standardized format. For example, extract and raname fields, convert data types, remove or add fields, and more.
+- Filtering &mdash; Specify conditions for processing the documents, which allow you to control the transformed or enriched documents. For example, remove fields from documents, such as sensitive information, before indexing.
+- Pipeline handling &mdash; Manage the flow of documents through the pipeline and perform specified actions. For example, handle error exceptions, execute another pipeline, or reroute a document to another index. 
+- Array/JSON handling &mdash; Manipulate arrays and JSON objects in documents with structured data formats. For example, run bath processors, parse JSON data, and sort elements. 
 
 For more information, check [Processor reference](https://www.elastic.co/guide/en/elasticsearch/reference/current/processors.html#ingest-processors-categories). 
 
@@ -26,7 +26,7 @@ When you create a pipeline, select **New pipeline from CSV**. For more informati
 
 Before you use ingest pipelines in production, test them using sample documents.
 
-1. Create or edit a pipeline.
+1. For the pipeline you want to test, open the **Actions* menu, then select **Edit**.
 1. Click **Add documents**.
 1. On the **Documents** tab, add the sample documents. 
 1. Click **Run the pipeline**.
@@ -36,4 +36,59 @@ Before you use ingest pipelines in production, test them using sample documents.
 ## Add a pipeline to an indexing request
 
 Use the `pipeline` query parameter to apply a pipeline to documents in 
-[individual or bulk requests](https://www.elastic.co/guide/en/elasticsearch/reference/current/ingest.html#add-pipeline-to-indexing-request)
+[individual](https://docs.elastic.co/api-reference/search/index) or [bulk](https://docs.elastic.co/api-reference/search/bulk) requests.
+
+1. Open [Console](app/dev_tools#/console).
+1. Run the following request:
+
+```js
+POST my-data-stream/_doc?pipeline=my-pipeline
+{
+  "@timestamp": "2099-03-07T11:04:05.000Z",
+  "my-keyword-field": "foo"
+}
+
+PUT my-data-stream/_bulk?pipeline=my-pipeline
+{ "create":{ } }
+{ "@timestamp": "2099-03-07T11:04:06.000Z", "my-keyword-field": "foo" }
+{ "create":{ } }
+{ "@timestamp": "2099-03-07T11:04:07.000Z", "my-keyword-field": "bar" }
+```
+
+You can also use the `pipeline` parameter with the [update by query](https://docs.elastic.co/api-reference/search/update-by-query) or [reindex](https://docs.elastic.co/api-reference/search/reindex) APIs.
+
+Run the following request:
+
+```js
+POST my-data-stream/_update_by_query?pipeline=my-pipeline
+
+POST _reindex
+{
+  "source": {
+    "index": "my-data-stream"
+  },
+  "dest": {
+    "index": "my-new-data-stream",
+    "op_type": "create",
+    "pipeline": "my-pipeline"
+  }
+}
+```
+
+## Set a default pipeline
+
+To set a default pipeline, use the `index.default_pipeline` index setting. Elasticsearch applies this pipeline to indexing requests if no pipeline parameter is specified.
+
+When the default pipeline is set and the pipeline does not exist, indexing requests fail. To override the default, use the `pipeline` parameter. 
+The special pipeline `_none` name indicates no default ingest pipeline will run.
+
+## Set a final pipeline
+
+To set a final pipeline, use the `index.final_pipeline` index setting. Elasticsearch applies this pipeline after the request or default pipeline, even when unspecified.
+
+The final pipeline runs after the specified request pipeline and existing default pipeline. When the final pipeline is set and the pipeline does not exist, indexing requests fail. 
+The special pipeline `_none` name indicates no final ingest pipeline will run.
+
+<DocCallOut title="Note">
+To change the _index field, you are unable to use a final pipeline. When the pipeline attempts to change the _index field, the indexing request fails.
+</DocCallOut>
