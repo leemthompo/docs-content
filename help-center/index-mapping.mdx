@@ -4,7 +4,7 @@ recommended to design its mapping.
 
 A document is a collection of fields where each field has a specific data type.
 When you map your data, you create a mapping definition that contains a list of
-fields with their corresponding data type that are pertinent to the document.
+fields with their corresponding data types.
 The mapping definition automatically includes metadata fields that govern the
 way metadata is handled.
 
@@ -13,19 +13,17 @@ There are two methods to design mapping definitions:
 * dynamic mapping,
 * explicit mapping.
 
-These methods provide different benefits based on your needs and the
-characteristics of your data.
 
 ## Dynamic mapping
 
-The automatic detection and addition of new fields is called _dynamic mapping_.
+When you use dynamic mapping, Elasticsearch automatically detects and adds new fields as documents are indexed.
 With dynamic mapping, you don't need to create an index, define its mapping type
 and the fields. Index a document and Elasticsearch will create the index, the
 mapping, and the fields automatically based on the characteristics of the
-ingested documents. This mapping method enables you to start exploring your data
+ingested documents. This enables you to start exploring your data
 as quickly as possible.
 
-If you run a request like this:
+Here's an example request:
 
 ```js
 PUT books/_doc/1
@@ -46,7 +44,7 @@ GET books/_mapping
 ```
 
 The response shows that the `title` and `author` fields are stored as `text`
-field types with a `keyword` type nested field. It means that fields containing
+field types with a `keyword` type nested field. This means that fields containing
 text are stored both as `text` and `keyword`. The `pages` field is mapped
 automatically as a `long` type field.
 
@@ -54,22 +52,22 @@ Dynamic mapping is the recommended way to define mapping when you're getting
 started with Elasticsearch and it's the default behavior when you ingest
 documents without explicitly defining a mapping.
 
-For more information on dynamic mapping rules, check the
+For more details refer to the
 [Dynamic field mapping](https://www.elastic.co/guide/en/elasticsearch/reference/current/dynamic-field-mapping.html)
 documentation.
 
 ## Explicit mapping
 
-Explicit mapping provides the most control over your index mapping definition as
-it enables you to specify the type of every field in an index. For example, you
+Explicit mapping provides the most control over your index mapping definition because
+it requires you to specify each field's type. For example, you
 can define the acceptable formats of a data type field, choose which strings
-need to be stored as full text fields or keyword fields, and specify fieds that
+need to be stored as full text fields or keyword fields, and specify fields that
 contain geolocations - and more.
 
-You can both specify field mapping when you create an index and add new fields
+You can specify field mappings when you create an index and when you add new fields
 to an existing index.
 
-The following example demonstrates of creating an index called `my-log-data-001`
+The following example creates an index called `my-log-data-001`
 and its mapping.
 
 ```js
@@ -104,8 +102,8 @@ storing locations, and a `date` for the dates with multiple acceptable formats
 specified. The formats are separated with `||`.
 
 Refer to the
-[documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html)
-for the data type reference.
+[field data type documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html)
+for more details.
 
 ## View the mapping
 
@@ -122,9 +120,8 @@ GET /my_log_data-001/_mapping/field/location
 ```
 
 <DocCallOut color="warning" title="Mapping explosion">
-Defining too many fields in an index can lead to a mapping explosion, which can
-cause out of memory errors and difficult situations to recover from.
+Defining too many fields in an index can lead to a mapping explosion, causing
+out-of-memory errors and other hard to recover situations.
 Use the [mapping limit](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-settings-limit.html)
-settings to limit the number of field mappings and prevent documents from
-causing a mapping explosion.
+settings to prevent mapping explosions.
 </DocCallOut>
