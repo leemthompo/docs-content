@@ -49,8 +49,8 @@ text are stored both as `text` and `keyword`. The `pages` field is mapped
 automatically as a `long` type field.
 
 Dynamic mapping is the recommended way to define mapping when you're getting
-started with Elasticsearch and it's the default behavior when you ingest
-documents without explicitly defining a mapping.
+started with Elasticsearch. It works by default when you don't explicitely
+define mapping before ingesting documents.
 
 For more details refer to the
 [Dynamic field mapping](https://www.elastic.co/guide/en/elasticsearch/reference/current/dynamic-field-mapping.html)
@@ -96,10 +96,14 @@ PUT my-log-data-001
 }
 ```
 
-The index consists of an `ip` field that stores IP addresses, a `text` field for
-URLs, an `integer` for storing the amount of bytes transmitted, a `geo_point` 
-storing locations, and a `date` for the dates with multiple acceptable formats
-specified. The formats are separated with `||`.
+The index consists of: 
+
+* an `ip` field that stores IP addresses,
+* a `text` field for URLs,
+* an `integer` for storing the amount of bytes transmitted,
+* a `geo_point` storing locations,
+* a `date` for the dates with multiple acceptable formats specified.
+The formats are separated with `||`.
 
 Refer to the
 [field data type documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html)
