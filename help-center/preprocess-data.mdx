@@ -3,8 +3,8 @@ allowing you to preprocess your data in a flexible and scalable manner.
 
 ## How does it work?
 
-Ingest pipelines are defined in Elasticsearch and include a series of configurable tasks called processors. Each processor performs an operation on 
-the document. For example, a processor can parse, enrich, filter, or modify the document. When you ingest a document into Elasticsearch, the document passes through the ingest pipeline, then
+Ingest pipelines are defined in Elasticsearch and include a series of configurable tasks called processors. Each processor runs sequentially on the 
+documents performing changes on them. For example, a processor can parse, enrich, filter, or modify the document. When you ingest a document into Elasticsearch, the document passes through the ingest pipeline, then
 each processor is sequentially applied to the document. 
 
 Processors perform the following operations:
@@ -13,11 +13,11 @@ Processors perform the following operations:
 - Transformation &mdash; Parse information from your documents to make sure they conform to a standardized format. For example, extract and raname fields, convert data types, and more.
 - Filtering &mdash; Specify conditions for processing the documents, which allow you to control the transformed or enriched documents. For example, remove fields from documents, such as sensitive information, before indexing.
 - Pipeline handling &mdash; Manage the flow of documents through the pipeline and perform specified actions. For example, handle error exceptions, execute another pipeline, or reroute a document to another index. 
-- Array/JSON handling &mdash; Manipulate arrays and JSON objects in documents with structured data formats. For example, run bath processors, parse JSON data, and sort elements. 
+- Array/JSON handling &mdash; Manipulate arrays and JSON objects in documents with structured data formats. For example, run batch processors, parse JSON data, and sort elements. 
 
 For more information, check [Processor reference](https://www.elastic.co/guide/en/elasticsearch/reference/current/processors.html#ingest-processors-categories). 
 
-<DocCallOut title="Tip">
+<DocCallOut color="success" title="Tip">
 Map your custom data to Elastic Common Schema (ECS), making it easier to search your data and reuse visualizations from other data sets. 
 When you create a pipeline, select **New pipeline from CSV**. For more information, check [Map custom data to ECS](https://www.elastic.co/guide/en/ecs/current/ecs-converting.html).
 </DocCallOut>
