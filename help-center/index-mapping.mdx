@@ -1,0 +1,131 @@
+An Elasticsearch index's mapping defines how documents are
+stored and indexed, specifying the data types for each field. This is
+analogous to schema definition in a relational database.
+
+A document is a collection of fields where each field has a specific data type.
+When you map your data, you create a mapping definition that contains a list of
+fields with their corresponding data types.
+The mapping definition automatically includes metadata fields that govern the
+way metadata is handled.
+
+There are two methods to design mapping definitions:
+
+* dynamic mapping
+* explicit mapping
+
+
+## Dynamic mapping
+
+When you use dynamic mapping, Elasticsearch automatically detects and adds new fields as documents are indexed.
+With dynamic mapping, you don't need to create an index, define its mapping type
+and the fields. Index a document and Elasticsearch will create the index, the
+mapping, and the fields automatically based on the characteristics of the
+ingested documents. This enables you to start exploring your data
+as quickly as possible.
+
+Here's an example request:
+
+```js
+PUT books/_doc/1
+{
+    "title": "Parallel Stories",
+    "author": "Péter Nádas",
+    "pages": 1520
+}
+```
+
+Elasticsearch will automatically create the `books` index, ingest the
+document, and define the mapping for it based on the ingested fields.
+
+Check the defined mapping by running the following request:
+
+```js
+GET books/_mapping
+```
+
+The response shows that the `title` and `author` fields are stored as `text`
+field types with a `keyword` type nested field. This means that fields containing
+text are stored both as `text` and `keyword`. The `pages` field is mapped
+automatically as a `long` type field.
+
+Dynamic mapping is the recommended way to define mapping when you're getting
+started with Elasticsearch. It works by default when you don't explicitely
+define mapping before ingesting documents.
+
+For more details refer to the
+[Dynamic field mapping](https://www.elastic.co/guide/en/elasticsearch/reference/current/dynamic-field-mapping.html)
+documentation.
+
+## Explicit mapping
+
+Explicit mapping provides the most control over your index mapping definition because
+it requires you to specify each field's type. For example, you
+can define the acceptable formats of a data type field, choose which strings
+need to be stored as full text fields or keyword fields, and specify fields that
+contain geolocations - and more.
+
+You can specify field mappings when you create an index and when you add new fields
+to an existing index.
+
+The following example creates an index called `my-log-data-001`
+and its mapping.
+
+```js
+PUT my-log-data-001
+{
+  "mappings": {
+    "properties": {
+      "client_ip": {
+        "type": "ip"
+      },
+      "url": {
+        "type": "text"
+      },
+      "bytes": {
+        "type": "integer"
+      },
+      "location": {
+        "type": "geo_point"
+      },
+      "date": {
+        "type":   "date",
+        "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
+      }
+    }
+  }
+}
+```
+
+The index consists of: 
+
+* an `ip` field that stores IP addresses,
+* a `text` field for URLs,
+* an `integer` for storing the amount of bytes transmitted,
+* a `geo_point` storing locations,
+* a `date` for the dates with multiple acceptable formats specified.
+The formats are separated with `||`.
+
+Refer to the
+[field data type documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html)
+for more details.
+
+## View the mapping
+
+You can check the mapping of an existing index by calling the get mapping API:
+
+```js
+GET /my-log-data-001/_mapping
+```
+
+You can also view the mapping of a specific field in an index:
+
+```js
+GET /my_log_data-001/_mapping/field/location
+```
+
+<DocCallOut color="warning" title="Mapping explosion">
+Defining too many fields in an index can lead to a mapping explosion, causing
+out-of-memory errors and other hard to recover situations.
+Use the [mapping limit](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-settings-limit.html)
+settings to prevent mapping explosions.
+</DocCallOut>
