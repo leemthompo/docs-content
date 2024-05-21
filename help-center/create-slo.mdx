@@ -1,0 +1,214 @@
+---
+id: hcObsCreateAnSlo
+slug: /help-center/observability/create-an-slo
+title: SLIs and SLOs
+description: Learn how to define a service-level indicator (SLI), set an objective, and create a service-level objective (SLO).
+tags: [ 'helpcenter', 'serverless', 'how-to' ]
+---
+
+Service-level objectives (SLOs) allow you to set clear, measurable targets for your service performance, based on indicators like availability, response times, error rates, and other key metrics.
+You can define SLOs based on different types of data sources, such as custom KQL queries and APM latency or availability data.
+
+To create an SLO:
+
+1. <DocLink id="serverlessObservabilityCreateAnSlo" section="define-your-sli">Choose and define your service-level indicator (SLI)</DocLink>.
+1. <DocLink id="serverlessObservabilityCreateAnSlo" section="set-your-objectives">Set your objectives</DocLink>.
+
+<div id="define-sli"></div>
+
+## Choose and define an SLI
+
+Choose an SLI based on your data:
+
+* **Custom KQL:** Based on raw logs coming from your services.
+* **Custom metric:** Define custom equations from metric fields in your indices.
+* **Timeslice metric:** Based on a custom equation that uses multiple aggregations.
+* **Histogram metric:** Based on histogram metrics that record latency and delay metrics.
+* **APM latency and APM availability:** Based on services using application performance monitoring (APM).
+
+Expand the following SLI types for examples and field definitions:
+
+<div id="custom-kql"></div>
+
+<DocAccordion buttonContent="Custom KQL">
+
+Create an indicator based on any of your ((es)) indices or data views.
+Define two queries: one that yields the good events from your index, and one that yields the total events from your index.
+
+**Example:** Define a custom KQL indicator based on the `service-logs` index with the **good query** defined as `nested.field.response.latency <= 100 and nested.field.env : “production”` and the **total query** defined as `nested.field.env : “production”`.
+
+### Custom KQL field definitions
+
+|  |  |
+|---|---|
+| Index | The data view or index pattern you want to base the SLI on. For example, `service-logs`. |
+| Timestamp field | The timestamp field used by the index. |
+| Query filter | A KQL filter to specify relevant criteria by which to filter the index documents. |
+| Good query | The query yielding events that are considered good or successful. For example, `nested.field.response.latency <= 100 and nested.field.env : “production”`. |
+| Total query | The query yielding all events to take into account for computing the SLI. For example, `nested.field.env : “production”`. |
+| Group by | The field used to group the data based on the values of the specific field. For example, you could group by the `url.domain` field, which would create individual SLOs for each value of the selected field. |
+
+</DocAccordion>
+
+<div id="custom-metric"></div>
+
+<DocAccordion buttonContent="Custom Metric">
+
+Create an indicator to define custom equations from metric fields in your indices.
+
+**Example:** Define **Good events** as the sum of the field `processor.processed` with a filter of `"processor.outcome: \"success\""` and the **Total events** as the sum of `processor.processed` with a filter of `"processor.outcome: *"`.
+
+### Custom metric SLI field definitions
+
+|  |  |
+|---|---|
+| **Source** ||
+|Index | The data view or index pattern you want to base the SLI on. For example, `my-service-*`.|
+|Timestamp | field The timestamp field used by the index.|
+|Query filter | A KQL filter to specify relevant criteria by which to filter the index documents. For example, `'field.environment : "production" and service.name : "my-service"'`.|
+| **Good events** ||
+| Metric [A-Z] | The field that is aggregated using the `sum` aggregation for good events. For example, `processor.processed`. |
+| Filter [A-Z] | The filter to apply to the metric for good events. For example, `"processor.outcome: \"success\""`. |
+| Equation | The equation that calculates the good metric. For example, `A`. |
+| **Total events** ||
+| Metric [A-Z] | The field that is aggregated using the `sum` aggregation for total events. For example, `processor.processed`. |
+| Filter [A-Z] | The filter to apply to the metric for total events. For example, `"processor.outcome: *"`. |
+| Equation | The equation that calculates the total metric. For example, `A`. |
+| Group by | The field used to group the data based on the values of the specific field. For example, you could group by the `url.domain` field, which would create individual SLOs for each value of the selected field.|
+
+</DocAccordion>
+
+<div id="timeslice-metric"></div>
+
+<DocAccordion buttonContent="Timeslice metric">
+
+Create an indicator based on a custom equation that uses statistical aggregations and a threshold to determine whether a slice is good or bad.
+Supported aggregations include `Average`, `Max`, `Min`, `Sum`, `Cardinality`, `Last value`, `Std. deviation`, `Doc count`, and `Percentile`.
+The equation supports basic math and logic.
+
+<DocCallOut title="Note">
+    This indicator requires you to use the `Timeslices` budgeting method.
+</DocCallOut>
+
+**Example:** Define an indicator to determine whether a Kubernetes StatefulSet is healthy.
+
+1. Set the query filter to `orchestrator.cluster.name: "elastic-k8s" AND kubernetes.namespace: "my-ns" AND data_stream.dataset: "kubernetes.state_statefulset"`.
+1. Define an equation that compares the number of ready (healthy) replicas to the number of observed replicas:
+`A == B ? 1 : 0`, where `A` retrieves the last value of `kubernetes.statefulset.replicas.ready` and `B` retrieves the last value of `kubernetes.statefulset.replicas.observed`.
+
+The equation returns `1` if the condition `A == B` is true (indicating the same number of replicas) or `0` if it's false. If the value is less than 1, the Kubernetes StatefulSet is unhealthy.
+
+### Timeslice metric SLI field definitions
+
+|  |  |
+|---|---|
+| **Source** ||
+| Index | The data view or index pattern you want to base the SLI on. For example, `metrics-*:metrics-*`. |
+| Timestamp field | The timestamp field used by the index. |
+| Query filter | A KQL filter to specify relevant criteria by which to filter the index documents. For example, `orchestrator.cluster.name: "elastic-k8s" AND kubernetes.namespace: "my-ns" AND data_stream.dataset: "kubernetes.state_statefulset"`. |
+| **Metric definition** | |
+| Aggregation [A-Z] | The type of aggregation to use. |
+| Field [A-Z] | The field to use in the aggregation. For example, `kubernetes.statefulset.replicas.ready`. |
+| Filter [A-Z] | The filter to apply to the metric.|
+| Equation | The equation that calculates the total metric. For example, `A == B ? 1 : 0`. |
+| Comparator | The type of comparison to perform. |
+| Threshold | The value to use along with the comparator to determine if the slice is good or bad. |
+
+</DocAccordion>
+
+<div id="histogram-metric"></div>
+
+<DocAccordion buttonContent="Histogram metric">
+
+Histograms record data in a compressed format and can record latency and delay metrics. You can create an SLI based on histogram metrics using a `range` aggregation or a `value_count` aggregation for both the good and total events. Filtering with KQL queries is supported on both event types.
+
+When using a `range` aggregation, both the `from` and `to` thresholds are required for the range, and the events are the total number of events within that range. The range includes the `from` value and excludes the `to` value.
+
+**Example:** You can define your **Good events** using the `processor.latency` field with a filter of `"processor.outcome: \"success\""`, and your **Total events** using the `processor.latency` field with a filter of `"processor.outcome: *"`.
+
+### Histogram metric SLI field definitions
+
+|  |  |
+|---|---|
+| **Source** ||
+| Index | The data view or index pattern you want to base the SLI on. For example, `my-service-*`. |
+| Timestamp field | The timestamp field used by the index. |
+| Query filter | A KQL filter to specify relevant criteria by which to filter the index documents. For example, `field.environment : "production" and service.name : "my-service"`. |
+| **Good events** ||
+| Aggregation | The type of aggregation to use for good events, either **Value count** or **Range**. |
+| Field |  The field used to aggregate events considered good or successful. For example, `processor.latency`. |
+| From |  (`range` aggregation only) The starting value of the range for good events. For example, `0`. |
+| To |  (`range` aggregation only) The ending value of the range for good events. For example, `100`. |
+| KQL filter |  The filter for good events. For example, `"processor.outcome: \"success\""`. |
+| **Total events** ||
+| Aggregation | The type of aggregation to use for total events, either **Value count** or **Range**. |
+| Field |  The field used to aggregate total events. For example, `processor.latency`. |
+| From |  (`range` aggregation only) The starting value of the range for total events. For example, `0`. |
+| To |  (`range` aggregation only) The ending value of the range for total events. For example, `100`. |
+| KQL filter | The filter for total events. For example, `"processor.outcome : *"`. |
+| Group by | The field used to group the data based on the values of the specific field. For example, grouping by the `url.domain` field would create individual SLOs for each value of the selected field. |
+
+</DocAccordion>
+
+<div id="apm-latency-and-availability"></div>
+
+<DocAccordion buttonContent="APM latency and APM availability">
+
+Create an SLI based on services using APM using either APM latency or APM availability.
+
+### APM latency
+
+Create an indicator based on the APM data received from your instrumented services and a latency threshold.
+
+**Example:** You can define an indicator on an APM service named `banking-service` for the `production` environment, and the transaction name `POST /deposit` with a latency threshold value of `300ms`.
+
+### APM availability
+
+Create an indicator based on the APM data received from your instrumented services.
+
+**Example:** You can define an indicator on an APM service named `search-service` for the `production` environment, and the transaction name `POST /search`.
+
+### APM latency and APM availability SLI field definitions
+
+|  |  |
+|---|---|
+| Service name | The APM service name. |
+| Service environment | Either `all` or the specific environment.
+|Transaction type | Either `all` or the specific transaction type.
+|Transaction name | Either `all` or the specific transaction name.
+|Threshold (APM latency only) | The latency threshold in milliseconds (ms) to consider the request as good.
+|Query filter | An optional query filter on the APM data.
+
+</DocAccordion>
+
+<div id="set-slo"></div>
+
+## Set your objectives
+
+After defining your SLI, set your objectives.
+
+### Time window
+
+The durations over which you want to compute your SLO:
+
+|  |  |
+|---|---|
+| Rolling | Uses data from a specified duration that depends on when the SLO was created. For example, the last `30 days`. |
+| Calendar aligned | Uses data from a specified duration that aligns with the calendar. For example, `weekly` or `monthly`. |
+
+<div id="slo-budgeting-method"></div>
+
+### Budgeting method
+
+The budgeting method for your SLO:
+
+|  |  |
+|---|---|
+| Occurrences | Uses the number of good events and the number of total events to compute the SLI. |
+| Timeslices | Breaks the overall time window into smaller slices of a defined duration, and uses the number of good slices over the number of total slices to compute the SLI. |
+
+<div id="slo-target"></div>
+
+### Target/SLO (%)
+
+The SLO target objective as a percentage.
