@@ -1,12 +1,21 @@
 **Discover** enables you to quickly search and filter your data, get information
 about the structure of the fields, and display your findings in a visualization.
 You can also customize and save your searches and place them on a dashboard.
-This article shows you how to use Discover to understand your data better.
+This article shows you how to use Discover to understand your data better. You
+will be able to:
+
+* select data views
+* explore your fields
+* define runtime fields
+* search your data
+* 
 
 ## Explore and search your data
 
+### Select or create a data view
+
 Select the data you want to explore. You need to create a data view from your
-Elasticsearch data to access it through Kibana.
+Elasticsearch data to access it through Discover.
 
 <DocCallOut color="success" title="Data view">
 A data view can point to one or more indices, data streams, or index aliases to
@@ -29,10 +38,48 @@ By default, the document table includes a column for the time field and a column
 that lists all other fields in the document.
 
 You can modify the document table to display your fields of interest. Use the
-sidebar search field to search for the field names you are interested in. The 
-**Available fields** section contains the fields that match the search criteria.
-Click <DocIcon type="plusInCircle" title="Add field as column icon" /> to toggle
-the field into the document table. You can also drag the field from the
-**Available fields** list into the document table.
+sidebar search field to search for the field names you are interested in.
 
+The **Available fields** section contains the fields that match the search
+criteria. Click <DocIcon type="plusInCircle" title="Add field as column icon" />
+to toggle the field into the document table. You can also drag the field from
+the **Available fields** list into the document table.
 
+You can rearrange the table columns by clicking a column header and selecting
+**Move left** or **Move right**. To copy the name or values in a column to the
+clipboard, click the column header and select the desired **Copy** option.
+
+### Add runtime fields to your data view
+
+You can add a runtime field to your data view from inside of **Discover**, and
+then use that field for analysis and visualizations, the same way you do with
+other fields.
+
+Click **Add a field** to create a new field. You can deinfe its type, set a
+custom description and label. You can also set its value by using the Painless
+scripting language.
+
+For example, the following script creates a field with a value that combines
+customer last name and first initial:
+
+```
+String str = doc['customer_first_name.keyword'].value;
+char ch1 = str.charAt(0);
+emit(doc['customer_last_name.keyword'].value + ", " + ch1);
+```
+
+### Search and filter
+
+Discover combines the power of free text search with filtering capabilities
+based on structured data. To search all fields, enter a simple string in the
+query bar.
+
+To search particular fields and build more complex queries, use the
+[Kibana Query language](https://www.elastic.co/guide/en/kibana/current/kuery-query.html).
+
+Whereas the query defines the set of documents you are interested in, filters
+enable you to zero in on subsets of those documents. You can filter results to
+include or exclude specific fields, filter for a value in a range, and more.
+
+Click <DocIcon type="plusInCircleFilled" title="Add filter" /> next to the query
+bar to configure a filter.
