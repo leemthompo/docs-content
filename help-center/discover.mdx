@@ -2,13 +2,15 @@
 about the structure of the fields, and display your findings in a visualization.
 You can also customize and save your searches and place them on a dashboard.
 This article shows you how to use Discover to understand your data better. You
-will be able to:
+will learn how to:
 
 * select data views
 * explore your fields
 * define runtime fields
-* search your data
-* 
+* search and filter your data
+* view a document
+* visualize field values
+
 
 ## Explore and search your data
 
@@ -49,6 +51,7 @@ You can rearrange the table columns by clicking a column header and selecting
 **Move left** or **Move right**. To copy the name or values in a column to the
 clipboard, click the column header and select the desired **Copy** option.
 
+
 ### Add runtime fields to your data view
 
 You can add a runtime field to your data view from inside of **Discover**, and
@@ -68,6 +71,7 @@ char ch1 = str.charAt(0);
 emit(doc['customer_last_name.keyword'].value + ", " + ch1);
 ```
 
+
 ### Search and filter
 
 Discover combines the power of free text search with filtering capabilities
@@ -83,3 +87,21 @@ include or exclude specific fields, filter for a value in a range, and more.
 
 Click <DocIcon type="plusInCircleFilled" title="Add filter" /> next to the query
 bar to configure a filter.
+
+
+### View a document
+
+Click <DocIcon type="expand" title="Toggle dialog with details" /> in the 
+document table to show document details. You can review all document fields and
+their corresponding values in the opening table. 
+
+
+### Visualize field values
+
+If the values of a field can be aggregated, you can visualize it from Discover.
+Find the field in the side bar and click its name to open a popup with
+statistical details about the field values. Click **Visualize** at the bottom of
+the popup to create a visualization best suited for the field based on its
+values.
+
+If you visualize geo point fields, your data appears in a map.
