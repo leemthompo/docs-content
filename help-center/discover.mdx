@@ -1,18 +1,19 @@
 **Discover** enables you to quickly search and filter your data, get information
 about the structure of the fields, and display your findings in a visualization.
-You can also customize and save your searches and place them on a dashboard.
+You can also customize and save your searches and add them to a dashboard.
 This article shows you how to use Discover to understand your data better. You
 will learn how to:
 
-* select data views
-* explore your fields
-* define runtime fields
+* select the data you want to explore
+* ```
+* view document fields and values
+* add fields to your data
 * search and filter your data
-* use ES|QL
-* save search
+* filter, transform, and analyze your data with ES|QL
+* save search queries and filters for future use
 * visualize field values
 
-You can also take a guided tour about Discover on the UI by clicking
+You can also take a guided tour for Discover by clicking
 **Take the tour** under the **Get the best look at your search results**
 section.
 
@@ -20,7 +21,7 @@ section.
 ## Select or create a data view
 
 Select the data you want to explore. You need to create a data view from your
-Elasticsearch data to access it through Discover.
+Elasticsearch data to access it in Discover.
 
 <DocCallOut color="success" title="Data view">
 A data view can point to one or more indices, data streams, or index aliases to
@@ -48,7 +49,7 @@ sidebar search field to search for the field names you are interested in.
 The **Available fields** section contains the fields that match the search
 criteria. Click <DocIcon type="plusInCircle" title="Add field as column icon" />
 to toggle the field into the document table. You can also drag the field from
-the **Available fields** list into the document table.
+the **Available fields** list to the document table.
 
 You can rearrange the table columns by clicking a column header and selecting
 **Move left** or **Move right**. To copy the name or values in a column to the
@@ -61,7 +62,7 @@ You can add a runtime field to your data view from inside of **Discover**, and
 then use that field for analysis and visualizations, the same way you do with
 other fields.
 
-Click **Add a field** to create a new field. You can deinfe its type, set a
+Click **Add a field** to create a new field. You can define its type, and set a
 custom description and label. You can also set its value by using the Painless
 scripting language.
 
@@ -109,8 +110,8 @@ to learn more about ES|QL in **Discover**.
 
 ## Save search
 
-Click ***Save** in the toolbar to save your search configuration and the search
-results. You can use it later to generate a CSV report, create visualizations or
+Click ***Save** in the toolbar to save your search and the search
+results. You can use it later to generate a CSV report, and create visualizations to display on
 dashboards. Saving a search saves the query text, filters, and the current view
 of **Discover**, including the columns selected in the document table, the sort
 order, and the data view.
@@ -118,7 +119,7 @@ order, and the data view.
 
 ## Visualize field values
 
-If the values of a field can be aggregated, you can visualize it from Discover.
+When the values of a field can be aggregated, you can visualize the field in Discover.
 Find the field in the side bar and click its name to open a popup with
 statistical details about the field values. Click **Visualize** at the bottom of
 the popup to create a visualization best suited for the field based on its
