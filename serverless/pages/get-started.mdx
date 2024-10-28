@@ -17,7 +17,7 @@ Use your ((ecloud)) account to create a fully-managed ((es)) project:
 
 1. Navigate to [cloud.elastic.co](((ess-console))) and create a new account or log in to your existing account.
 
-1. Within **Fully-managed projects**, choose **Create project**.
+1. Within **Serverless Projects**, choose **Create project**.
 
 1. Choose the ((es)) project type.
 
@@ -40,13 +40,17 @@ Create an API key, which will enable you to access the ((es)) API to ingest and 
 
 1. Scroll to **Add an API Key** and select **New**.
 
-1. In **Create an API key**, enter a name for your key and its expiration.
-   Select **Create API Key** to finish.
+1. In **Create API Key**, enter a name for your key and its expiration.
+   
+1. Under **Control Security privileges**, you can set specific access permissions for this API key. By default, it has full access to all APIs.
+   
+1. The **Add metadata** section allows you to add custom key-value pairs to help identify and organize your API keys.
+   
+1. Select **Create API Key** to finish.
 
-The API key is displayed as a set of values, including `id`, `name`, `expiration`, `api_key`, and `encoded`.
-Store this information securely—it is displayed only once.
-
-You will use the `encoded` value when sending API requests.
+After creation, you'll see your API key displayed as an encoded string.
+Store this encoded API key securely—it is displayed only once and cannot be retrieved later.
+You will use this encoded API key when sending API requests.
 
 <DocCallOut>
   You can't recover or retrieve a lost API key. Instead, you must delete the key and create a new one.
