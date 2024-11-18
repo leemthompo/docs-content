@@ -14,8 +14,11 @@ Elastic provides three serverless solutions available on {ecloud}:
 * **https://www.elastic.co/guide/en/serverless/current/what-is-elasticsearch-serverless.html[{es}]**: Build powerful applications and search experiences using a rich ecosystem of vector search capabilities, APIs, and libraries.
 * **https://www.elastic.co/guide/en/serverless/current/what-is-observability-serverless.html[{observability}]**: Monitor your own platforms and services using powerful machine learning and analytics tools with your logs, metrics, traces, and APM data.
 * **https://www.elastic.co/guide/en/serverless/current/what-is-security-serverless.html[{elastic-sec}]**: Detect, investigate, and respond to threats with SIEM, endpoint protection, and AI-powered analytics capabilities.
+<<<<<<< HEAD
 
 Elastic serverless products are currently in preview. 
+=======
+>>>>>>> c52057e (fixing merge conflicts)
 
 // https://www.elastic.co/blog/elastic-serverless-architecture[Learn more about serverless in our blog].
 
@@ -43,6 +46,20 @@ and you define the retention settings for your data streams.
 a set of predefined settings you can edit.
 
 [discrete]
+<<<<<<< HEAD
+=======
+[[general-what-is-serverless-elastic-control-your-data-and-performance]]
+== Control your data and performance
+
+Control your project data and query performance against your project data.
+
+**Data.** Choose the data you want to ingest, and the method to ingest it. By default, data is stored indefinitely in your project,
+and you define the retention settings for your data streams.
+
+**Performance.** For granular control over costs and query performance against your project data, serverless projects come with a set of predefined <<elasticsearch-manage-project,settings>> that you can edit.
+
+[discrete]
+>>>>>>> c52057e (fixing merge conflicts)
 [[general-what-is-serverless-elastic-differences-between-serverless-projects-and-hosted-deployments-on-ecloud]]
 == Differences between serverless projects and hosted deployments on {ecloud}
 
@@ -51,9 +68,21 @@ You can run https://www.elastic.co/guide/en/cloud/current/ec-getting-started.htm
 |===
 | Option| Serverless| Hosted
 
+<<<<<<< HEAD
 | **Cluster management**
 | Fully managed by Elastic.
 | You provision and manage your hosted clusters. Shared responsibility with Elastic.
+=======
+<<<<<<< HEAD
+| image:https://www.elastic.co/docs/assets/images/elasticsearch.png[width=150]
+a| [.card-title]#{es}# +
+Build custom search applications with {es}.
+=======
+| **Cluster management**
+| Fully managed by Elastic.
+| You provision and manage your hosted clusters. Shared responsibility with Elastic.
+>>>>>>> 717cc8e (updating guidance for serverless overview)
+>>>>>>> c52057e (fixing merge conflicts)
 
 | **Scaling**
 | Autoscales out of the box.
