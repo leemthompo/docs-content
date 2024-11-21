@@ -47,7 +47,7 @@ These include dashboards, visualizations, maps, {data-sources}, and more.
 | Create, manage, and assign tags to your saved objects.
 | {es-badge}{obs-badge}{sec-badge}
 
-| <<elasticsearch-explore-your-data-visualizations-save-to-the-visualize-library>>
+| <<visualize-library>>
 | Create and manage visualization panels that you can use across multiple dashboards.
 | {es-badge}{obs-badge}{sec-badge}
 |===
